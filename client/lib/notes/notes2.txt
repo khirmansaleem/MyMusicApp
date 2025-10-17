@@ -1,0 +1,25 @@
+--------------------------------------------------------------------------------
+----->  Why signup page using stateful widget?
+---------------------------------------------------------------------------------
+ --> A SIGNUP SCREEN isn’t just static text; it needs to remember what the user has
+typed and update the UI as things happen. That’s why it’s built as a StatefulWidget.
+
+--> you can think of the State object as the place that
+ stores and keeps track of the changing state of that widget.
+-------------------------------------------------------------------------------------
+-----------------> CORE ------------------------->
+--------------------------------------------------------------------
+--> Core contains resources that are shared across all the features
+in the application
+----------------------------------------------------------------------
+----------------Static Variables
+----------------------------------------------------------------
+static variables can be accessed directly without creating object of
+the class.
+they belong to the class directly not the instance
+--------------------------------------------------------------------------
+--> Main axis alignment set to centered, will centre the elements
+in the centre according to main axis.
+--> if it is column, main axis is vertical.
+--> if it is row, main axis is horizental
+---------------------------------------------------------

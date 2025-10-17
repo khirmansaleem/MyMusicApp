@@ -1,0 +1,33 @@
+---------------------------------------------------------------->
+------------------> MVVM ARCHITECTURE --------------------------->
+----------------------------------------------------------------->
+
+VIEW --> UI
+VIEW MODEL --> State Management
+MODEL --> Repository too.
+<------------------------------------------------------------------->
+
+--> model responsible for data fetching and manipulation. business logic and fetching data
+from the databases, interaction with api's, databases.
+--> VIEW --> includes widgets that displays data on the screen.
+--> VIEW MODEl ---> presents data to the view and response to the user actions.
+--> it handles what state the view is showing and if it is updated correctly.
+it acts as a bridge between view and model.
+
+----------------------------------------------------------------------------------
+<-------> In simple ways with an example that exactly the logic works <------>
+-----------------------------------------------------------------------------------
+User taps button  →  View tells ViewModel
+ViewModel asks Model for data
+Model gives data back → ViewModel processes it
+ViewModel updates values → View shows the new data
+
+------------------------------------------------------------------------------------
+----------------------FEATURE WISE DEVELOPMENT -------------------------------------
+------------------------------------------------------------------------------------
+Feature-wise MVVM keeps each feature like a mini-app, making the codebase cleaner,
+easier to scale, and simpler for teams to work on and maintain.
+--> so the files and classes inside the auth feature cannot be used inside the
+home feature, because if it happens then deleting the auth feature will also
+cause errors in the home feature and inconsistency across project.
+----------------------------------------------------------------------------------
