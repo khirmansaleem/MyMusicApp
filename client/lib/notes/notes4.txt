@@ -1,0 +1,29 @@
+In One Line:
+=========================================================
+✅ GET = ask for data (no body)
+✅ POST = send data (has body)
+
+=========================================================
+DEPENDENCY INJECTION EXPLAINED
+==========================================================
+FastAPI internally does this:
+
+-> Calls get_db() before running get_users().
+-> It runs the part before the yield → creates a DB session.
+-> Passes the yielded value (db) to your function as a parameter.
+-> Waits until your function finishes (even if it crashes).
+-> Runs the part after the yield (the finally block)
+→ closes the DB session.
+-> So yes:
+
+-> FastAPI “injects” the dependency (db).
+-> It manages the lifecycle (open → use → close).
+-> You don’t have to call or close it manually anywhere.
+=================================================================
+-------REMOTE REPOSITORY FUNCTION------------------------------
+==================================================================
+The RemoteRepository is the bridge between your Flutter app and FastAPI backend.
+It gives your app a clean, testable, and professional data layer
+that separates networking logic from your UI and core business code.
+Yes, the RemoteRepository is the place where all your network
+ connection logic usually lives.
