@@ -1,8 +1,9 @@
+import uuid
+from config import cloudinary   # 👈 this loads the configured instance
+import cloudinary.uploader             # 👈 this gives you the upload functions
 from fastapi import APIRouter, File, UploadFile
 from fastapi.params import Depends, Form
 from sqlalchemy.orm import Session
-import cloudinary
-import cloudinary.uploader
 from database import get_db
 from middlewares.auth_middleware import auth_middleware
 
@@ -10,14 +11,6 @@ from middlewares.auth_middleware import auth_middleware
 # uploading the songs
 router =APIRouter()
 
-
-# Configuration       
-cloudinary.config( 
-    cloud_name = "donu5vfdz", 
-    api_key = "426182853435422", 
-    api_secret = "gyhf2Oplhz4_SvoNE06ab2oN1Kk", # Click 'View API Keys' above to copy your API secret
-    secure=True
-)
 
 # POST route for uploading songs
 # we dont encourage storing thumbnail and songs in the database. 
@@ -31,4 +24,11 @@ def upload_song(song: UploadFile=File(...), thumbnail: UploadFile=File(...),
                 db : Session= Depends(get_db),
                 auth_data: dict = Depends(auth_middleware)):
         # Here, you would typically save the files and metadata to your database 
-    return {"message": "Song uploaded successfully"},
+    song_id= str(uuid.uuid4())
+    song_res = cloudinary.uploader.upload(song.file, resource_type= 'auto', folder= f'songs/{song_id}')
+    print(song_res)
+    thumbnail_res = cloudinary.uploader.upload(thumbnail.file, resource_type= 'image', folder= f'songs/{song_id}')
+    print(thumbnail_res)
+    # now store all this data in postgres database.
+    return 'ok'
+    
