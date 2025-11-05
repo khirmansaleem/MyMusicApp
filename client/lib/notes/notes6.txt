@@ -1,0 +1,37 @@
+
+==================================================
+Authentication persistence
+=============================================
+Whether the app remembers that you’re logged in
+✅ Saved JWT token
+====================================================
+UI / Form Persistence
+=======================================================
+------------------------------------------------------
+Whether your email/password fields remain filled
+⚙️ Saved form data (not auth state)
+==========================================================
+If a valid JWT exists on the client, the app treats the user
+as already logged in and skips the login screen.
+
+When the JWT is deleted or expires, the app redirects back
+to the login screen.
+=================================================================
+So what JWT actually ensures
+
+Persistence of login state → User stays logged in until logout or expiry
+
+Statelessness → Server doesn’t need to remember sessions
+
+Security → Only valid, untampered tokens grant access
+
+==================================================================
+The client decides which screen to show (login or home) based on whether
+ a token exists.
+
+The server decides whether the token is still valid.
+
+If valid → home data loads normally.
+
+If invalid → server says “401 Unauthorized,” and the client redirects
+back to login.

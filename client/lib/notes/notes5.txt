@@ -1,0 +1,98 @@
+==========================================================
+WHAT EXACTLY IS DART PATTERN MATCHING FEATURE?
+===========================================================
+📝 Summary:
+
+🧠 Pattern matching = matching shape + type + value of data in one step.
+
+🚀 Introduced in Dart 3.
+
+🧰 Works with lists, maps, records, objects, enums.
+
+🧽 Makes if and switch statements much cleaner.
+
+===================================================================
+            VIEW MODEL AND STATE MANAGEMENT CONCEPTS
+=====================================================================
+//-------------------------------------------------------------------------
+// view model use state management tools because it's task is
+// to tell view what to display on the screen.
+// state management task is to determine what state should be
+// displayed on the screen.
+// connecting view with the repository with this view model bridge.
+//Riverpod ==> a system that lets you create “providers,” and each
+// provider stores and manages a piece of state (data) in your app.
+//--------------------------------------------------------------------------
+====================== ref.watch ================================
+================================================================================
+It subscribes your widget (UI) to a provider.
+
+When that provider’s state changes → the widget rebuilds automatically.
+
+It’s meant for UI layer, where visual updates are needed.
+
+==================================================================
+===============ref.listen ===============================
+==================================================================
+
+It reacts to provider state changes without rebuilding UI.
+
+Typically used for side effects — like showing a SnackBar or navigation.
+
+So both are part of the View/UI layer responsibilities.
+
+
+====================================================================
+So what does “not prone to change” mean?
+==============================================================
+
+The ViewModel itself does not need to listen to other providers,
+ because its data (auth state) changes only when it updates it
+ — not from external UI triggers.
+
+ ====================================================================
+ The ViewModel manages state only (no watching, no listening).
+
+ The View watches or listens to providers to react and rebuild.
+
+ The Repository handles API calls or DB access.
+ =====================================================================
+ Core Purpose of JWT
+ ===============================================================
+ ---> JWT’s main job is to safely represent verified identity in
+  a tamper-proof way without requiring the server to maintain a
+  session in memory or DB.
+ =================================================================
+ It gives you stateless authentication where the client holds
+ the token, and the server just verifies it using the secret key.
+ ======================================================================
+ 🧠 The Flow (Simplified)
+ ====================================================================
+ 1️⃣ Login
+ You send email/password → server verifies and responds with a JWT.
+========================================================================
+ 2️⃣ Store token (Persistence)
+======================================================================
+ You store that JWT on the client:
+ In localStorage / sessionStorage (for web)
+ In flutter_secure_storage (for Flutter mobile apps)
+ NEVER in plain cookies or global variables
+ =====================================================================
+🧠 Conceptually
+=====================================================================
+Signup → “Give me a new account.”
+(Server creates a user + gives you an access token)
+=======================================================================
+Login → “Prove that I already have an account.”
+(Server checks your credentials + gives you an access token again)
+========================================================================
+JWT --> JSON WEB TOKEN
+======================================================================
+==> IT IS THE SECURE WAY TO SEND DATA BETWEEN TWO PARTIES IN THE FORM OF
+SECURED TOKEN, SO THE DATA IS NOT TEMPERED AND TRANSFERRED SECURELY
+==========================================================================
+The client stores the JWT as-is (encoded, signed) —
+it doesn’t encrypt or change it —
+the server later verifies the token’s signature
+and expiry to decide whether to allow access or return an error.
+=====================================================================

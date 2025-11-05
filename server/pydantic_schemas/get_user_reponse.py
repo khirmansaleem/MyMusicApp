@@ -1,15 +1,9 @@
-# pydantic_schemas/user_response.py
 from pydantic import BaseModel
 
-class UserResponse(BaseModel):
+class GetUserDataResponse(BaseModel):
     id: str
     name: str
     email: str
     password: str | None = None  # ✅ optional
 
     model_config = {"from_attributes": True}
-
-
-class UserLoginResponse(BaseModel):
-    token: str
-    user: UserResponse
