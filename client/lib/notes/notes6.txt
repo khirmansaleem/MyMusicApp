@@ -35,3 +35,6 @@ If valid → home data loads normally.
 
 If invalid → server says “401 Unauthorized,” and the client redirects
 back to login.
+Provider Type	What it Does	When to Use
+Function-based (@riverpod)	Returns a plain object or value	For simple dependencies or services (like repositories, APIs, configs)
+Class-based (@riverpod class … extends _$)	Holds reactive state & business logic	For ViewModels, controllers, or any logic that updates UI

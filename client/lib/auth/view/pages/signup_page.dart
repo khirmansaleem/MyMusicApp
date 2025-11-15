@@ -22,56 +22,68 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>(); // storing the state of the form
+  late final removeListener;
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    super.dispose();
     formKey.currentState!.validate();
+    removeListener(); // Very important
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    // Check Loading state whether it is doing or not.
-    final isLoading = ref
-        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
-    //listen for handling error or data. and loading
-    ref.listen(
+  void initState() {
+    super.initState();
+    removeListener = ref.listenManual(
       authViewModelProvider,
       (_, next) {
         next?.when(
           data: (data) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(
-                content: Text('Account already Create, please login'),
-              ));
-            // whenever there is data, navigate from signup to login page
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text('Account already created, please login'),
+                ),
+              );
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+            );
           },
           error: (error, st) {
             showSnackBar(context, error.toString());
           },
           loading: () {
-            // loading is not implemented here, because for loading part I want to
-            // return a widget and it is not possible here.
-            // return type of listen is void so it is not possible to return a widget
-            // here.
+            // loader logic handled outside
           },
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('🧩 SignupPage built');
+
+    // Check Loading state whether it is doing or not.
+    final authState = ref.watch(authViewModelProvider);
+    debugPrint('the auth state  is $authState');
+
+    final isLoading = authState?.isLoading ?? false;
+
+    debugPrint('the state of loading is $isLoading');
 
     // see the state values
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: true,
+      // we can solve this loader logic later
       body: isLoading
           ? const LoadingIndicator()
           : SingleChildScrollView(

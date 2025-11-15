@@ -8,14 +8,15 @@ class AppTheme {
       );
 
   static final darkThemeMode = ThemeData.dark().copyWith(
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Pallete.backgroundColor,
-      ),
-      scaffoldBackgroundColor: Pallete.backgroundColor,
-      // your main background
-      inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.all(27),
-        focusedBorder: border(Pallete.gradient2),
-        enabledBorder: border(Pallete.borderColor),
-      ));
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Pallete.backgroundColor,
+    ),
+    scaffoldBackgroundColor: Pallete.backgroundColor,
+    // your main background
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: const EdgeInsets.all(27),
+      focusedBorder: border(Pallete.gradient2),
+      enabledBorder: border(Pallete.borderColor),
+    ),
+  );
 }

@@ -25,7 +25,7 @@ final class AuthLocalRepositoryProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'authLocalRepositoryProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -46,4 +46,4 @@ final class AuthLocalRepositoryProvider extends $FunctionalProvider<
 }
 
 String _$authLocalRepositoryHash() =>
-    r'9e4851ce630a5152e98375f86afbc48c93effec8';
+    r'd7c8058bcdade283be77c3816975585cc1dfe184';

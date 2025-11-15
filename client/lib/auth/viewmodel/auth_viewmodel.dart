@@ -36,7 +36,7 @@ class AuthViewModel extends _$AuthViewModel {
     _authRemoteRepository = ref.read(authRemoteRepositoryProvider);
     _authLocalRepository = ref.read(authLocalRepositoryProvider);
     _currentUserNotifier = ref.read(currentUserProvider.notifier);
-    return null;
+    return const AsyncValue.data(UserModel.empty);
   }
 
   // initialize shared preferences local database here
@@ -116,31 +116,31 @@ class AuthViewModel extends _$AuthViewModel {
 // on the server side, decode that token
 // get user_id and from that id get user data from postgresql database.
 // FOR USER STATE PERSISTENCE
-
   Future<UserModel?> getData() async {
-    // we fetch the data only when user restarts the application.
-    //------------------------------------------------------------
-    state = const AsyncValue.loading();
-    // it gives innerData of async value or null
-    // if it is still loading or error.
+    // only show loading when actually restoring a logged-in user
     final repo = await ref.read(authLocalRepositoryProvider.future);
     final token = repo.getToken();
-    debugPrint(
-        '🔐 Inside getDATA [AuthDebug] Stored token: ${repo.getToken()}');
-    unawaited(debugPrintSharedPrefs()); // optional: print full prefs content
 
-    if (token != null) {
-      // send a request to server to get user data by token
-      final res = await _authRemoteRepository.getCurrentUserData(token: token);
-      final val = switch (res) {
-        Left(value: final l) => state =
-            AsyncValue.error(l.message, StackTrace.current),
-        Right(value: final r) => _getDataSuccess(r),
-      };
+    debugPrint('🔐 getDATA Token: $token');
 
-      return val.value;
+    if (token == null) {
+      // user is NOT logged in → mark state as "empty"
+      state = const AsyncValue.data(UserModel.empty);
+      return null;
     }
-    return null;
+
+    // now we can safely set loading
+    state = const AsyncValue.loading();
+
+    final res = await _authRemoteRepository.getCurrentUserData(token: token);
+
+    final val = switch (res) {
+      Left(value: final l) => state =
+          AsyncValue.error(l.message, StackTrace.current),
+      Right(value: final r) => _getDataSuccess(r),
+    };
+
+    return val.value;
   }
 
 // get User data success when restarting applicaiotn

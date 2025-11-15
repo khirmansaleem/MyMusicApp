@@ -44,3 +44,18 @@ Future<File?> pickAudio() async {
     return null;
   }
 }
+
+String colorToHex(Color color, {bool includeAlpha = true}) {
+  final a = color.alpha.toRadixString(16).padLeft(2, '0');
+  final r = color.red.toRadixString(16).padLeft(2, '0');
+  final g = color.green.toRadixString(16).padLeft(2, '0');
+  final b = color.blue.toRadixString(16).padLeft(2, '0');
+
+  return '#${includeAlpha ? a : ''}$r$g$b'.toUpperCase();
+}
+
+Color hexToColor(String hex) {
+  hex = hex.replaceAll('#', '');
+  if (hex.length == 6) hex = 'FF$hex'; // assume full opacity
+  return Color(int.parse(hex, radix: 16));
+}

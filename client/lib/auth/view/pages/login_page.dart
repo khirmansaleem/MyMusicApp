@@ -21,22 +21,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>(); // storing the state of the form
+  late final removeListener;
 
   @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-    formKey.currentState!.validate();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // widget is only loaded if the value of isLoading changes in authViewModel Provider
-    final isLoading = ref
-        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
+  void initState() {
     //listen for handling error or data. and loading
-    ref.listen(
+    removeListener = ref.listenManual(
       authViewModelProvider,
       (_, next) {
         next?.when(
@@ -65,6 +55,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    formKey.currentState!.validate();
+    removeListener(); // Very important
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // widget is only loaded if the value of isLoading changes in authViewModel Provider
+    final authState = ref.watch(authViewModelProvider);
+    debugPrint('the auth state  is $authState');
+    final isLoading = authState?.isLoading ?? false;
+
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: true,

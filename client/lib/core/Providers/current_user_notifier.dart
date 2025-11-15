@@ -5,6 +5,7 @@
 // ✅ Automatically restores state on app restart.
 // ✅ Keeps the app reactive (UI rebuilds when user logs in/out).
 // never dispose off and provides us data whenever we asks for it.
+
 import 'package:client/auth/model/user_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

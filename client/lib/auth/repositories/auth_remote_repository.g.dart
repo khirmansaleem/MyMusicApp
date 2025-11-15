@@ -22,7 +22,7 @@ final class AuthRemoteRepositoryProvider extends $FunctionalProvider<
           argument: null,
           retry: null,
           name: r'authRemoteRepositoryProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -51,4 +51,4 @@ final class AuthRemoteRepositoryProvider extends $FunctionalProvider<
 }
 
 String _$authRemoteRepositoryHash() =>
-    r'3a22426af88879347e1278f66bf786f109bd891c';
+    r'4e908dd8f1fac174b384879adb28dd2331f64ca1';

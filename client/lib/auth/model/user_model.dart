@@ -11,6 +11,13 @@ class UserModel {
     required this.id,
   });
 
+  static const empty = UserModel(
+    id: '',
+    name: '',
+    email: '',
+    token: '',
+  );
+
   /// 🧱 Create a copy with some fields changed
   UserModel copyWith({
     String? token,
