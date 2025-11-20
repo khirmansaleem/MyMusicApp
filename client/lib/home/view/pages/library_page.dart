@@ -6,8 +6,10 @@ class LibraryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      child: Text('THIS IS THE LIBRARY PAGE. '),
+    return SafeArea(
+      child: Container(
+        child: Text('THIS IS THE LIBRARY PAGE. '),
+      ),
     );
   }
 }

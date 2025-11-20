@@ -1,6 +1,8 @@
 import 'package:client/home/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/repositories/auth_local_repository.dart';
@@ -11,6 +13,8 @@ import 'core/theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path); // <-- THIS is the correct way
 
   final prefs = await SharedPreferences.getInstance();
   final repo = AuthLocalRepository.fromPrefs(prefs);

@@ -10,6 +10,7 @@ from config import *  # loads .env and configures Cloudinary
 
 router =APIRouter()
 
+#############################################################################
 @router.post('/upload-song', status_code=201)
 def upload_song(
     song: UploadFile = File(...),
@@ -69,8 +70,10 @@ def upload_song(
     
         return {"status": "error", "message": f"Unexpected error: {str(e)}"}
 
+#############################################################################
+
 #DEFINE GET ROUTE TO FETCH SONGS FROM THE DATABASE AND RETURN THEM AS A LIST OF JSON OBJECTS
-@router.get('/', status_code=200)
+@router.get('/list', status_code=200)
 def get_songs(db: Session = Depends(get_db), auth_details = Depends(auth_middleware)):
     songs = db.query(Song).all()
     return songs
