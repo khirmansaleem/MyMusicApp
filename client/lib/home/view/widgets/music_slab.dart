@@ -2,6 +2,7 @@ import 'package:client/core/Providers/current_song_notifier.dart';
 import 'package:client/core/Providers/song_playing_state_notifier.dart';
 import 'package:client/core/utils.dart';
 import 'package:client/home/Providers/local_songs_provider.dart';
+import 'package:client/home/Providers/recently_played_songs_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,8 @@ class MusicSlab extends ConsumerWidget {
 
         // 1️⃣ Add current song to library
         ref.read(localSongsProvider.notifier).addSong(currentSong);
-        //
+        // add current song to recently played as well
+        ref.read(recentlyPlayedSongsProvider.notifier).addSong(currentSong);
         Navigator.of(context).push(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 350),

@@ -5,25 +5,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_pallete.dart';
+import '../../Providers/recently_played_songs_provider.dart';
 
 class SongsPage extends ConsumerWidget {
   const SongsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SafeArea(
+    final recentlyPlayed = ref.watch(recentlyPlayedSongsProvider);
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+        // bottom = 120 to avoid overlap with MusicSlab
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            // ------------------------------
+            // ⭐ LATEST TODAY TITLE
+            // ------------------------------
+            const Text(
               'Latest today',
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.w700,
               ),
             ),
+
+            const SizedBox(height: 12),
+
+            // ------------------------------
+            // ⭐ LATEST TODAY LIST
+            // ------------------------------
             ref.watch(getAllSongsProvider).when(
                   data: (songs) {
                     return SizedBox(
@@ -32,58 +45,65 @@ class SongsPage extends ConsumerWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: songs.length,
                         itemBuilder: (context, index) {
-                          //here is the builder logic
                           final song = songs[index];
                           return GestureDetector(
                             onTap: () {
+                              // when tapped → play
                               ref
                                   .read(currentSongProvider.notifier)
                                   .updateSong(song);
+
+                              // add to recently played
+                              ref
+                                  .read(recentlyPlayedSongsProvider.notifier)
+                                  .addSong(song);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 16),
+                              padding: const EdgeInsets.only(right: 16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Thumbnail
                                   Container(
                                     width: 180,
                                     height: 180,
                                     decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(7),
                                       image: DecorationImage(
-                                        image: NetworkImage(
-                                          song.thumbnail_url,
-                                        ),
+                                        image: NetworkImage(song.thumbnail_url),
                                         fit: BoxFit.cover,
                                       ),
-                                      borderRadius: BorderRadius.circular(7),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  // Song name
                                   SizedBox(
                                     width: 180,
                                     child: Text(
                                       song.song_name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
                                     ),
                                   ),
+
+                                  // Artist
                                   SizedBox(
                                     width: 180,
                                     child: Text(
                                       song.artist,
-                                      style: TextStyle(
-                                        color: Pallete.subtitleText,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Pallete.subtitleText,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -94,13 +114,59 @@ class SongsPage extends ConsumerWidget {
                       ),
                     );
                   },
-                  error: (error, st) {
-                    return Center(
-                      child: Text(error.toString()),
-                    );
-                  },
+                  error: (error, st) => Center(child: Text(error.toString())),
                   loading: () => const LoadingIndicator(),
                 ),
+
+            const SizedBox(height: 25),
+
+            // ------------------------------
+            // ⭐ RECENTLY PLAYED (NEW SECTION)
+            // ------------------------------
+            if (recentlyPlayed.isNotEmpty) ...[
+              const Text(
+                "Recently Played",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      recentlyPlayed.first.thumbnail_url,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recentlyPlayed.first.song_name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        recentlyPlayed.first.artist,
+                        style: TextStyle(
+                          color: Pallete.subtitleText,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25),
+            ],
           ],
         ),
       ),

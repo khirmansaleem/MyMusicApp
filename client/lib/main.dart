@@ -20,6 +20,7 @@ void main() async {
 
   Hive.registerAdapter(SongModelAdapter()); // <-- REQUIRED
   await Hive.openBox<SongModel>('library_songs'); // <-- REQUIRED
+  await Hive.openBox<SongModel>('recently_played');
 
   final prefs = await SharedPreferences.getInstance();
   final repo = AuthLocalRepository.fromPrefs(prefs);
