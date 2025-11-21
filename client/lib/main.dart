@@ -10,11 +10,16 @@ import 'auth/view/pages/signup_page.dart';
 import 'core/Providers/app_initializer_provider.dart';
 import 'core/Providers/current_user_notifier.dart';
 import 'core/theme/theme.dart';
+import 'home/model/song_model.dart';
+import 'home/model/song_model_adaptor.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dir = await getApplicationDocumentsDirectory();
-  Hive.init(dir.path); // <-- THIS is the correct way
+  Hive.init(dir.path);
+
+  Hive.registerAdapter(SongModelAdapter()); // <-- REQUIRED
+  await Hive.openBox<SongModel>('library_songs'); // <-- REQUIRED
 
   final prefs = await SharedPreferences.getInstance();
   final repo = AuthLocalRepository.fromPrefs(prefs);

@@ -11,14 +11,26 @@ HomeLocalRepository homeLocalRepository(Ref ref) {
 }
 
 class HomeLocalRepository {
-  final Box<SongModel> box = Hive.box<SongModel>('songs');
+  // This box will only store USER library songs
+  final Box<SongModel> libraryBox = Hive.box<SongModel>('library_songs');
 
-  Future<void> uploadSongs(List<SongModel> songs) async {
-    await box.clear();
-    await box.addAll(songs);
+  // Add a song to library (store only one song)
+  Future<void> addToLibrary(SongModel song) async {
+    await libraryBox.put(song.id, song);
   }
 
-  List<SongModel> loadSongs() {
-    return box.values.cast<SongModel>().toList();
+  // Load all library songs
+  List<SongModel> loadLibrarySongs() {
+    return libraryBox.values.cast<SongModel>().toList();
+  }
+
+  // Remove a song
+  Future<void> removeFromLibrary(String songId) async {
+    await libraryBox.delete(songId);
+  }
+
+  // Check if song already in library
+  bool isInLibrary(String songId) {
+    return libraryBox.containsKey(songId);
   }
 }
