@@ -14,7 +14,12 @@ class RecentlyPlayedSongs extends _$RecentlyPlayedSongs {
 
   Future<void> addSong(SongModel song) async {
     final repo = ref.read(recentlyPlayedRepositoryProvider);
-    await repo.add(song);
-    state = repo.load();
+
+    // generate unique key
+    final key = "${song.id}_${DateTime.now().millisecondsSinceEpoch}";
+
+    await repo.box.put(key, song);
+
+    state = repo.box.values.toList().reversed.toList();
   }
 }

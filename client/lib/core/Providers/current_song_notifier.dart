@@ -41,7 +41,7 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
 
   // one function that allow toggling between musics
 
-  void updateSong(SongModel song) async {
+  Future<void> updateSong(SongModel song) async {
     // Create only once
     audioPlayer ??= AudioPlayer();
 

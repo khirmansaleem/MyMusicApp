@@ -42,7 +42,7 @@ final class RecentlyPlayedSongsProvider
 }
 
 String _$recentlyPlayedSongsHash() =>
-    r'32353648adf694130088bae60743924cc55366d2';
+    r'a7d9b3c25f07045a2b747abd2d2454e1f905350d';
 
 abstract class _$RecentlyPlayedSongs extends $Notifier<List<SongModel>> {
   List<SongModel> build();

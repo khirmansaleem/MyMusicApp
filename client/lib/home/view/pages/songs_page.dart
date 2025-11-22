@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_pallete.dart';
+import '../../Providers/local_songs_provider.dart';
 import '../../Providers/recently_played_songs_provider.dart';
 
 class SongsPage extends ConsumerWidget {
@@ -47,14 +48,14 @@ class SongsPage extends ConsumerWidget {
                         itemBuilder: (context, index) {
                           final song = songs[index];
                           return GestureDetector(
-                            onTap: () {
-                              // when tapped → play
-                              ref
+                            onTap: () async {
+                              await ref
                                   .read(currentSongProvider.notifier)
                                   .updateSong(song);
-
-                              // add to recently played
-                              ref
+                              await ref
+                                  .read(localSongsProvider.notifier)
+                                  .addSong(song);
+                              await ref
                                   .read(recentlyPlayedSongsProvider.notifier)
                                   .addSong(song);
                             },
@@ -123,48 +124,81 @@ class SongsPage extends ConsumerWidget {
             // ------------------------------
             // ⭐ RECENTLY PLAYED (NEW SECTION)
             // ------------------------------
+            const Text(
+              "Recently Played",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
             if (recentlyPlayed.isNotEmpty) ...[
-              const Text(
-                "Recently Played",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      recentlyPlayed.first.thumbnail_url,
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
+              // ⭐ Vertical list (multiple items)
+              ListView.builder(
+                shrinkWrap: true,
+                // ⭐ Important for vertical list inside Column
+                physics: NeverScrollableScrollPhysics(),
+                // ⭐ So it scrolls with SongsPage
+                itemCount: recentlyPlayed.length,
+                itemBuilder: (context, index) {
+                  final song = recentlyPlayed[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      ref.read(currentSongProvider.notifier).updateSong(song);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Thumbnail
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              song.thumbnail_url,
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          // Text Area
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  song.song_name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  song.artist,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Pallete.subtitleText,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        recentlyPlayed.first.song_name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Text(
-                        recentlyPlayed.first.artist,
-                        style: TextStyle(
-                          color: Pallete.subtitleText,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  );
+                },
               ),
+
               const SizedBox(height: 25),
             ],
           ],
